@@ -89,6 +89,11 @@ def create_ID_object(id_number: str):
     return id
 
 
+def write_invalid(inp, err):
+    with open("ValidatedInputs/InvalidIDs.txt", "a") as f:
+        f.write(f"{inp}     {err}\n")
+
+
 def validate_ID_number(inp: str, file: str = "UserInputs.txt"):
     err = ""
     if len(inp) > 7:
@@ -100,22 +105,17 @@ def validate_ID_number(inp: str, file: str = "UserInputs.txt"):
                     if id.valid_date() != True:
                         id.print_ID("Invalid date")
                         err = "Invalid date"
-                        with open("ValidatedInputs/InvalidIDs.txt", "a") as f:
-                            f.write(f"{inp}     {err}\n")
-
+                        write_invalid(inp, err)
                     elif id.checksum() != True:
                         id.print_ID("Incorrect checksum")
                         err = "Incorrect checksum"
-                        with open("ValidatedInputs/InvalidIDs.txt", "a") as f:
-                            f.write(f"{inp}     {err}\n")
-
+                        write_invalid(inp, err)
                     else:
                         id.print_ID()
                         valids = []
                         with open("ValidatedInputs/ValidIDs.txt", "r") as f:
                             for i in f:
                                 valids.append(i.strip())
-
                         for i in valids:
                             if convert_input_to_standrad_format(i) == id.get_ID():
                                 return
@@ -125,39 +125,26 @@ def validate_ID_number(inp: str, file: str = "UserInputs.txt"):
                 else:
                     print(f"{standrad_inp}    Contains non-numeric characters")
                     err = "Contains non-numeric characters"
-                    with open("ValidatedInputs/InvalidIDs.txt", "a") as f:
-                        f.write(f"{inp}     {err}\n")
+                    write_invalid(inp, err)
 
             elif len(standrad_inp) > 10:
                 print(f"{standrad_inp}   Too long")
                 err = "Too long"
-                with open("ValidatedInputs/InvalidIDs.txt", "a") as f:
-                    f.write(f"{inp}     {err}\n")
+                write_invalid(inp, err)
 
             else:
                 print(f"{standrad_inp}   Too short")
                 err = "Too short"
-                with open("ValidatedInputs/InvalidIDs.txt", "a") as f:
-                    f.write(f"{inp}     {err}\n")
+                write_invalid(inp, err)
 
         else:
             print(f"{inp}   Invalid format")
-            print("""
-            Valid formats:
-                620129-8558
-                62 01 29 8558
-                1962-01-29 8558
-                6201298558
-
-            """)
             err = "Invalid format"
-            with open("ValidatedInputs/InvalidIDs.txt", "a") as f:
-                f.write(f"{inp}     {err}\n")
+            write_invalid(inp, err)
     else:
         print(f"{inp}   Too short")
         err = "Too short"
-        with open("ValidatedInputs/InvalidIDs.txt", "a") as f:
-            f.write(f"{inp}     {err}\n")
+        write_invalid(inp, err)
     file_exists = exists(f"ValidatedInputs/{file}")
     if file_exists:
         with open(f"ValidatedInputs/{file}", "a") as f:
@@ -173,7 +160,7 @@ def read_ID_num_from_file():
     print("Which file would you like to read from?")
     print("     ", end="")
     for i in range(len(onlyfiles)):
-        print(f"({i+1}){onlyfiles[i]}", end="")
+        print(f"({i+1}){onlyfiles[i]}     ", end="")
     print(f"     ({len(onlyfiles)+1})Exit")
     inp = int(input("Ans: "))
     if inp == len(onlyfiles)+1:
@@ -181,6 +168,20 @@ def read_ID_num_from_file():
     with open(f"InputsToRead/{onlyfiles[inp-1]}", "r") as f:
         for i in f:
             validate_ID_number(i.strip(), onlyfiles[inp-1])
+
+
+def read_validated_ID():
+    onlyfiles = [f for f in listdir(
+        "ValidatedInputs") if isfile(join("ValidatedInputs", f))]
+    print("Which file would you like to read from?")
+    print("     ", end="")
+    for i in range(len(onlyfiles)):
+        print(f"({i+1}){onlyfiles[i]}    ", end="")
+    print(f"     ({len(onlyfiles)+1})Exit")
+    inp = int(input("Ans: "))
+    with open(f"ValidatedInputs/{onlyfiles[inp-1]}", "r") as f:
+        for i in f:
+            print(i.strip())
 
 
 def clearConsole(): return system('cls' if name in ('nt', 'dos') else 'clear')
@@ -201,7 +202,8 @@ Ans: """)
             clearConsole()
             read_ID_num_from_file()
         elif inp == "3":
-            pass
+            clearConsole()
+            read_validated_ID()
         elif inp == "4":
             clearConsole()
             print("Good bye!")
