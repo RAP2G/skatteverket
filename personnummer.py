@@ -31,13 +31,12 @@ class IdNumber:
                     con_sum += prod
             else:
                 con_sum += int(id_number[i])
-            print(con_sum)
         if con_sum % 10 == 0:
             return True
         else:
             return False
 
-    def print_ID(self, *err: str):
+    def print_ID(self, **err: str):
         print(f"{self.year+self.month+self.day+self.number}     {err}")
 
     def get_year(self):
@@ -53,11 +52,69 @@ class IdNumber:
         return self.number
 
 
+def validate_format(inp: str):
+    if "-" == inp[6]:
+        return True
+    elif "-" == inp[7] and "-" == inp[4] and " " == inp[10]:
+        return True
+    elif " " == inp[2] and " " == inp[5] and " " == inp[8]:
+        return True
+    elif len(inp) == 10 and inp.isdecimal():
+        return True
+    else:
+        return False
+
+
+def convert_input_to_standrad_format(inp: str):
+    """
+    Format of inp must be validated with the function validate_format() before inserting into this function
+    """
+    if "-" == inp[6]:
+        return inp.replace("-", "")
+    elif "-" == inp[7] and "-" == inp[4] and " " == inp[10]:
+        return inp.replace("-", "").replace(" ", "")[2:]
+    elif " " == inp[2] and " " == inp[5] and " " == inp[8]:
+        return inp.replace(" ", "")
+    else:
+        return inp
+
+
 def create_ID_object(id_number: str):
     id_number = id_number.strip()
     id = IdNumber(id_number[:2], id_number[2:4],
                   id_number[4:6], id_number[6:])
     return id
+
+
+def validate_ID_number(inp):
+    if validate_format():
+        standrad_inp = convert_input_to_standrad_format(inp)
+        if len(standrad_inp) == 10:
+            if standrad_inp.isdecimal():
+                id = create_ID_object(standrad_inp)
+                if id.valid_date() != True:
+                    id.print_ID("Invalid date")
+                elif id.checksum() != True:
+                    id.print_ID("Incorrect checksum")
+                else:
+                    id.print_ID()
+
+            else:
+                print(f"{inp}    Contain non-numeric characters")
+        elif len(inp) > 10:
+            print(f"{inp}   Too long")
+        else:
+            print(f"{inp}   Too short")
+    else:
+        print(f"{inp}   Invalid format")
+        print(""" 
+        Valid formats:
+            620129-8558
+            62 01 29 8558
+            1962-01-29 8558
+            6201298558
+        
+        """)
 
 
 def read_ID_num_from_file():
@@ -76,22 +133,7 @@ Ans: """)
             clearConsole()
             print("Please input an ID number")
             inp = input("Ans: ")
-            if inp.isdecimal():
-                if len(inp) == 10:
-                    id = create_ID_object(inp)
-                    if id.valid_date() != True:
-                        id.print_ID("Invalid date")
-                    elif id.checksum() != True:
-                        id.print_ID("Incorrect checksum")
-                    else:
-                        id.print_ID()
-                elif len(inp) > 10:
-                    print(f"{inp}   Too long")
-                else:
-                    print(f"{inp}   Too short")
-
-            else:
-                print(f"{inp}   Doesn't only contain numbers")
+            validate_ID_number(inp)
             print()
         elif inp == "2":
             clearConsole()
