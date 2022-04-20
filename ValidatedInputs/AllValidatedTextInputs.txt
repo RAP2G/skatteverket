@@ -1,6 +1,12 @@
+790614-9864     
 68-08-26-8772     Invalid format
 3407 07-3620     Invalid format
+520108-2103     
+25 11 18 4901     
 73 0209-6131     Invalid format
+26 11 14 8681     
+1938-01-09 4255     
+0411257116     
 987u9     Too short
 -     Too short
 kjb     Too short

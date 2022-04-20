@@ -11,3 +11,4 @@ kjb     Too short
 12 23 23 23     Too short
 12 12 34 34     Too short
 12 23 23 2323     Invalid date
+1234     Too short
