@@ -20,6 +20,9 @@ class IdNumber:
         return is_valid_date
 
     def checksum(self):
+        """
+        Calculates checksum and checks if it is correct.
+        """
         con_sum = 0
         id_number = self.year+self.month+self.day+self.number
         for i in range(len(id_number)):
@@ -60,6 +63,14 @@ def clearConsole(): return system('cls' if name in ('nt', 'dos') else 'clear')
 
 
 def validate_format(inp: str):
+    """
+    Returns true if the format of the argument inp is one of the folowing:
+                                                                            yymmdd-xxxx
+                                                                            yy mm dd xxxx
+                                                                            yyyy-mm-dd xxxx
+                                                                            yymmddxxxx
+    Otherwise returns false
+    """
     if "-" == inp[6]:
         return True
     elif "-" == inp[7] and "-" == inp[4] and " " == inp[10]:
@@ -74,7 +85,9 @@ def validate_format(inp: str):
 
 def convert_input_to_standrad_format(inp: str):
     """
-    Format of inp must be validated with the function validate_format() before inserting into this function
+    Removes spaces and dashes from argument inp. Then it returns inp. 
+    Format of the argument inp must be validated with the function validate_format() before inserting it into this function.
+
     """
     if "-" == inp[6]:
         return inp.replace("-", "")
@@ -87,6 +100,11 @@ def convert_input_to_standrad_format(inp: str):
 
 
 def create_ID_object(id_number: str):
+    """
+    Returns an ID object created from the argument.
+
+    """
+
     id_number = id_number.strip()
     id = IdNumber(id_number[:2], id_number[2:4],
                   id_number[4:6], id_number[6:])
@@ -94,6 +112,10 @@ def create_ID_object(id_number: str):
 
 
 def write_invalid(inp: str, err, invalids: list):
+    """
+    Checks if the argument inp is already written in the file. If true it returns nothing(essentially ends the function).
+    Otherwise it appends inp with the error message err on to the last line of the file.   
+    """
     file_exists = exists("ValidatedInputs/InvalidIDs.txt")
     if file_exists:
         for i in invalids:
@@ -104,8 +126,14 @@ def write_invalid(inp: str, err, invalids: list):
 
 
 def validate_ID_number(inp: str, valids: list, invalids: list, file: str = "UserInputs.txt", allinputs: list = []):
+    """
+    This is where the magic happens. The code checks if the input is valid by checking different parameters. 
+    If all of the parameters are correct it saves the argument inp onto the file 'ValidIDs.txt'.
+    Otherwise it calles on the write_invalid() function.
+
+    """
     err = ""
-    if len(inp) > 7:
+    if len(inp) > 9:
         if validate_format(inp):
             standrad_inp = convert_input_to_standrad_format(inp)
             if len(standrad_inp) == 10:
@@ -159,6 +187,11 @@ def validate_ID_number(inp: str, valids: list, invalids: list, file: str = "User
 
 
 def read_ID_num_from_file(valids: list, invalids: list, allinputs: list):
+    """
+    Creates a list of files in inside the folder InputsToValidate.
+    Then it prints out the names of the files and prompts the user to choose whichone's content 
+    to read and send as an input inside validate_ID_number() funcution.
+    """
     onlyfiles = [f for f in listdir(
         "InputsToRead") if isfile(join("InputsToRead", f))]
     print("Which file would you like to read from?")
@@ -178,6 +211,13 @@ def read_ID_num_from_file(valids: list, invalids: list, allinputs: list):
 
 
 def read_validated_ID():
+    """
+    It checks for files inside the ValidatedInputs folder. 
+    Then it prints out the names of the files and prompts the user to choose whichone's content to print out into the terminal.
+    Then using the with open 'r' method it reads the file and prints out its contents into the terminal.
+
+    """
+
     onlyfiles = [f for f in listdir(
         "ValidatedInputs") if isfile(join("ValidatedInputs", f))]
     print("Which file would you like to read from?")
@@ -195,14 +235,43 @@ def read_validated_ID():
     clearConsole()
 
 
-def user_input(inp: str, valids: list, invalids: list):
+def user_input(valids: list, invalids: list):
+    """
+    Asks the user to input an ID number which then get validated by the validate_ID_number() function.
+    """
+
     print("Please input an ID number")
+    print("""Valid formats:
+    
+    yymmdd-xxxx
+    yy mm dd xxxx
+    yyyy-mm-dd xxxx
+    yymmddxxxx
+    
+    """)
     inp = input("Ans: ")
     validate_ID_number(inp, valids, invalids)
+    input()
     clearConsole()
 
 
 def main():
+    """
+    This is the main function with the while true loop for the main menu.
+    This function first checks if there are any files in the ValidatedInputs folder.
+    If the specified file is inside the folder, its contents are put inside one of the lists valids, invalids or allinputs 
+    depending on which file it read tha data from. 
+    Then it prompts the user to choose what they want to do.
+    Then depending on the answer on of the following functions are called:
+            if inp == '1'
+                user_input()
+            elif inp == '2'
+                read_ID_num_from_file()
+            elif inp == '3'
+                read_validated_ID()
+
+
+    """
     valids = []
     invalids = []
     allinputs = []
@@ -228,7 +297,7 @@ def main():
 Ans: """)
         if inp == "1":
             clearConsole()
-            user_input()
+            user_input(valids, invalids)
 
         elif inp == "2":
             clearConsole()
