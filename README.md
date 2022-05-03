@@ -12,3 +12,7 @@ Before you can run the program you need to check if the following conditions are
   - InvalidIDs.txt
   - UserInputs.txt
   - ValidIDs.txt
+
+## Additional Information
+
+Any files that you would want to read from for validation should be put inside the folder InputsToValidate

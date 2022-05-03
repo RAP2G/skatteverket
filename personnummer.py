@@ -275,6 +275,7 @@ def main():
     valids = []
     invalids = []
     allinputs = []
+    clearConsole()
     while True:
         file_exists = exists("ValidatedInputs/ValidIDs.txt")
         if file_exists:
