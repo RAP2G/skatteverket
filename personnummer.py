@@ -1,7 +1,6 @@
-from msilib.schema import File
 from os import listdir, name, system
 from os.path import isfile, join, exists
-from datetime import date, datetime
+from datetime import datetime
 
 
 class IdNumber:
@@ -294,7 +293,7 @@ def main():
                     allinputs.append(i.strip())
 
         inp = input("""Would you like to:
-            (1)Input an ID number       (2)Read ID number for validation       (3)Read validated ID numbers       (4)Stop the programme
+            (1)Input an ID number       (2)Read ID number for validation       (3)Read validated ID numbers       (4)Stop the program
 Ans: """)
         if inp == "1":
             clearConsole()
@@ -311,12 +310,8 @@ Ans: """)
             print("Good bye!")
             break
         else:
-            print("You need to answer with either 1, 2 or 3")
+            print("You need to answer with either 1, 2 ,3 or 4")
 
 
 if __name__ == "__main__":
     main()
-
-
-# TODO: How many numbers in pnr?
-# Any dash?
