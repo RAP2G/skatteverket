@@ -155,9 +155,13 @@ def validate_ID_number(inp: str, valids: list, invalids: list, file: str = "User
 
     Args:
         inp (str): The string which you want to check if it is an ID number
+
         valids (list): List containing the content of the file ValidIDs.txt
+
         invalids (list): List containing the content of the file InvalidIDs.txt
+
         file (str, optional): Name of the file where you want to save the argument inp. Defaults to "UserInputs.txt".
+
         allinputs (list): List containing the content of the file AllValidatedTextInputs.txt
 
     """
