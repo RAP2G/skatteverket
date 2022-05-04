@@ -67,4 +67,4 @@ Contributions are prohibited.
 
 Soma Szabó szabosonka@gmail.com
 
-Link to the project: <https://github.com/RAP2G/skatteverket/tree/main>
+Link to the project: <https://github.com/RAP2G/skatteverket
