@@ -62,13 +62,19 @@ def clearConsole(): return system('cls' if name in ('nt', 'dos') else 'clear')
 
 
 def validate_format(inp: str):
-    """
+    """_summary_
     Returns true if the format of the argument inp is one of the folowing:
-                                                                            yymmdd-xxxx
-                                                                            yy mm dd xxxx
-                                                                            yyyy-mm-dd xxxx
-                                                                            yymmddxxxx
+                                                                yymmdd-xxxx
+                                                                yy mm dd xxxx
+                                                                yyyy-mm-dd xxxx
+                                                                yymmddxxxx
     Otherwise returns false
+
+    Args:
+        inp (str): The string which you want to validate
+
+    Returns:
+        Boolean: True or False 
     """
     if "-" == inp[6]:
         return True
@@ -83,9 +89,15 @@ def validate_format(inp: str):
 
 
 def convert_input_to_standrad_format(inp: str):
-    """
-    Removes spaces and dashes from argument inp. Then it returns inp. 
-    Format of the argument inp must be validated with the function validate_format() before inserting it into this function.
+    """_summary_
+        Removes spaces and dashes from argument inp. Then it returns inp. 
+        Format of the argument inp must be validated with the function validate_format() before inserting it into this function.
+
+    Args:
+        inp (str): String to convert to standrad format. 
+
+    Returns:
+        str: The altered version of the argument inp
 
     """
     if "-" == inp[6]:
@@ -99,8 +111,14 @@ def convert_input_to_standrad_format(inp: str):
 
 
 def create_ID_object(id_number: str):
-    """
+    """_summary_
     Returns an ID object created from the argument.
+
+    Args:
+        id_number (str): A string which the function will make an object out of.
+
+    Returns:
+        IdNumber: The object created from the argument id_number
 
     """
 
@@ -110,10 +128,15 @@ def create_ID_object(id_number: str):
     return id
 
 
-def write_invalid(inp: str, err, invalids: list):
-    """
-    Checks if the argument inp is already written in the file. If true it returns nothing(essentially ends the function).
-    Otherwise it appends inp with the error message err on to the last line of the file.   
+def write_invalid(inp: str, err: str, invalids: list):
+    """_summary_
+        Checks if the argument inp is already written in the file. If true it returns nothing(essentially ends the function).
+        Otherwise it appends inp with the error message err on to the last line of the file.   
+
+    Args:
+        inp (str): The string which you want to check if it is an ID number
+        err (str): A string specifying the criteria which it does not comply with.     
+        invalids (list): List containing the content of the file InvalidIDs.txt
     """
     file_exists = exists("ValidatedInputs/InvalidIDs.txt")
     if file_exists:
@@ -125,10 +148,17 @@ def write_invalid(inp: str, err, invalids: list):
 
 
 def validate_ID_number(inp: str, valids: list, invalids: list, file: str = "UserInputs.txt", allinputs: list = []):
-    """
-    This is where the magic happens. The code checks if the input is valid by checking different parameters. 
-    If all of the parameters are correct it saves the argument inp onto the file 'ValidIDs.txt'.
-    Otherwise it calles on the write_invalid() function.
+    """_summary_
+        This is where the magic happens. The code checks if the input is valid by checking different parameters. 
+        If all of the parameters are correct it saves the argument inp onto the file 'ValidIDs.txt'.
+        Otherwise it calles on the write_invalid() function.
+
+    Args:
+        inp (str): The string which you want to check if it is an ID number
+        valids (list): List containing the content of the file ValidIDs.txt
+        invalids (list): List containing the content of the file InvalidIDs.txt
+        file (str, optional): Name of the file where you want to save the argument inp. Defaults to "UserInputs.txt".
+        allinputs (list): List containing the content of the file AllValidatedTextInputs.txt
 
     """
     err = ""
@@ -186,10 +216,15 @@ def validate_ID_number(inp: str, valids: list, invalids: list, file: str = "User
 
 
 def read_ID_num_from_file(valids: list, invalids: list, allinputs: list):
-    """
-    Creates a list of files in inside the folder InputsToValidate.
-    Then it prints out the names of the files and prompts the user to choose whichone's content 
-    to read and send as an input inside validate_ID_number() funcution.
+    """_summary_
+        Creates a list of files in inside the folder InputsToValidate.
+        Then it prints out the names of the files and prompts the user to choose whichone's content 
+        to read and send as an input inside validate_ID_number() funcution.
+
+    Args:
+        valids (list): List containing the content of the file ValidIDs.txt
+        invalids (list): List containing the content of the file InvalidIDs.txt
+        allinputs (list): List containing the content of the file AllValidatedTextInputs.txt
     """
     onlyfiles = [f for f in listdir(
         "InputsToRead") if isfile(join("InputsToRead", f))]
@@ -210,10 +245,10 @@ def read_ID_num_from_file(valids: list, invalids: list, allinputs: list):
 
 
 def read_validated_ID():
-    """
-    It checks for files inside the ValidatedInputs folder. 
-    Then it prints out the names of the files and prompts the user to choose whichone's content to print out into the terminal.
-    Then using the with open 'r' method it reads the file and prints out its contents into the terminal.
+    """_summary_
+        It checks for files inside the ValidatedInputs folder. 
+        Then it prints out the names of the files and prompts the user to choose whichone's content to print out into the terminal.
+        Then using the with open 'r' method it reads the file and prints out its contents into the terminal.
 
     """
 
@@ -235,8 +270,12 @@ def read_validated_ID():
 
 
 def user_input(valids: list, invalids: list):
-    """
-    Asks the user to input an ID number which then get validated by the validate_ID_number() function.
+    """_summary_
+        Asks the user to input an ID number which then get validated by the validate_ID_number() function.
+
+    Args:
+        valids (list): List containing the content of the file ValidIDs.txt
+        invalids (list): List containing the content of the file InvalidIDs.txt
     """
 
     print("Please input an ID number")
@@ -255,19 +294,19 @@ def user_input(valids: list, invalids: list):
 
 
 def main():
-    """
-    This is the main function with the while true loop for the main menu.
-    This function first checks if there are any files in the ValidatedInputs folder.
-    If the specified file is inside the folder, its contents are put inside one of the lists valids, invalids or allinputs 
-    depending on which file it read tha data from. 
-    Then it prompts the user to choose what they want to do.
-    Then depending on the answer on of the following functions are called:
-            if inp == '1'
-                user_input()
-            elif inp == '2'
-                read_ID_num_from_file()
-            elif inp == '3'
-                read_validated_ID()
+    """_summary_
+        This is the main function with the while true loop for the main menu.
+        This function first checks if there are any files in the ValidatedInputs folder.
+        If the specified file is inside the folder, its contents are put inside one of the lists valids, invalids or allinputs 
+        depending on which file it read tha data from. 
+        Then it prompts the user to choose what they want to do.
+        Then depending on the answer on of the following functions are called:
+                if inp == '1'
+                    user_input()
+                elif inp == '2'
+                    read_ID_num_from_file()
+                elif inp == '3'
+                    read_validated_ID()
 
 
     """
